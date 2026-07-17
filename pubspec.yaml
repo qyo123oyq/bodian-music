@@ -1,0 +1,39 @@
+name: bodian_music
+description: 波点音乐第三方安卓应用
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+  http: ^1.2.0
+  dio: ^5.4.0
+  provider: ^6.1.1
+  just_audio: ^0.9.36
+  audio_service: ^0.18.12
+  audio_session: ^0.1.18
+  shared_preferences: ^2.2.2
+  path_provider: ^2.1.2
+  cached_network_image: ^3.3.1
+  palette_generator: ^0.3.3+3
+  flutter_lyric: ^2.0.4+6
+  url_launcher: ^6.2.4
+  permission_handler: ^11.2.0
+  file_picker: ^6.1.1
+  intl: ^0.19.0
+  crypto: ^3.0.3
+  convert: ^3.1.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
