@@ -17,6 +17,9 @@ on:
         required: false
         default: 'false'
 
+permissions:
+  contents: write
+
 jobs:
   build-apk:
     runs-on: ubuntu-latest
@@ -43,12 +46,6 @@ jobs:
       - name: Build APK
         run: flutter build apk --release
 
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: bodian-music-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
-
       - name: Rename APK with version
         run: |
           mkdir -p release
@@ -63,23 +60,40 @@ jobs:
           echo "APK_NAME=bodian_music_${VERSION}.apk" >> $GITHUB_ENV
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bodian-music-apk
+          path: release/*.apk
+
       - name: Upload to Release (if tag push)
         if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: release/*.apk
           generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            ## 波点音乐第三方安卓应用 ${{ env.VERSION }}
+
+            ### 功能特性
+            - 歌曲搜索（酷我音乐API）
+            - 在线音乐播放
+            - 播放控制（播放/暂停/上一首/下一首）
+            - 4种播放模式（顺序/单曲/随机/列表循环）
+            - 3档音质选择（标准/高品质/无损）
+            - LRC歌词显示
+            - 推荐歌单与热门歌曲
+            - 深色模式与8种主题色
+            - UID登录与签到领VIP
+            - 下载管理与播放缓存
+            - 均衡器与低音增强
 
       - name: Upload to Release (manual trigger)
         if: github.event_name == 'workflow_dispatch'
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ inputs.version }}
           name: Release v${{ inputs.version }}
           files: release/*.apk
           prerelease: ${{ inputs.prerelease == 'true' }}
           generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
